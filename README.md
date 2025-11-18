@@ -93,8 +93,7 @@ Create .env file:
 
 PORT=5000
 NODE_ENV=development
-MONGO_URI=mongodb+srv://admin:admincsdepartment@departmentdb.avv2yat.mongodb.net/?retryWrites=true&w=majority&appName=DepartmentDB
-
+MONGO_URI=your url
 
 Start backend server:
 
