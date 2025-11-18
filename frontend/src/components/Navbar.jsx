@@ -14,23 +14,18 @@ const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const location = useLocation();
 
-  // Detect scroll
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setIsOpen(false);
     setActiveDropdown(null);
   }, [location]);
 
-  // Close mobile menu when clicking outside
+  // FIXED CLICK OUTSIDE
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -78,31 +73,20 @@ const Navbar = () => {
       >
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center h-16">
-            {/* Logo with Animation */}
+            {/* LOGO */}
             <Link to="/" className="flex items-center gap-3 group relative">
-              {/* Glow Effect */}
-              <div className="absolute inset-0 bg-primary-400 rounded-full blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
-
-              {/* Icon */}
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full blur-md opacity-50 group-hover:opacity-75 transition-opacity"></div>
-                <div className="relative bg-gradient-to-br from-primary-500 to-primary-700 w-12 h-12 rounded-full flex items-center justify-center transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 shadow-2xl">
-                  <FaGraduationCap className="text-2xl text-white" />
-                </div>
+              <div className="relative bg-gradient-to-br from-primary-500 to-primary-700 w-12 h-12 rounded-full flex items-center justify-center shadow-xl">
+                <FaGraduationCap className="text-2xl text-white" />
               </div>
-
-              {/* Text */}
               <div className="hidden sm:block">
-                <h1 className="text-xl font-black text-gray-900 group-hover:text-primary-600 transition-colors duration-300">
+                <h1 className="text-xl font-black text-gray-900">
                   CS Department
                 </h1>
-                <p className="text-xs text-gray-600 group-hover:text-primary-500 transition-colors">
-                  Excellence in Education
-                </p>
+                <p className="text-xs text-gray-600">Excellence in Education</p>
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
+            {/* DESKTOP NAV */}
             <div className="hidden lg:flex items-center gap-2">
               {navLinks.map((link, index) =>
                 link.dropdown ? (
@@ -113,23 +97,23 @@ const Navbar = () => {
                     onMouseLeave={() => setActiveDropdown(null)}
                   >
                     <button
-                      className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
+                      className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold ${
                         activeDropdown === link.label
-                          ? "bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-lg"
-                          : "text-gray-700 hover:bg-gradient-to-r hover:from-primary-50 hover:to-primary-100 hover:text-primary-600"
+                          ? "bg-primary-600 text-white shadow-lg"
+                          : "text-gray-700 hover:text-primary-600"
                       }`}
                     >
                       {link.label}
                       <FaChevronDown
-                        className={`text-xs transition-transform duration-300 ${
+                        className={`text-xs transition-transform ${
                           activeDropdown === link.label ? "rotate-180" : ""
                         }`}
                       />
                     </button>
 
-                    {/* Dropdown Menu with Animation */}
+                    {/* DESKTOP DROPDOWN */}
                     <div
-                      className={`absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 border border-gray-100 ${
+                      className={`absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border transform transition-all duration-300 ${
                         activeDropdown === link.label
                           ? "opacity-100 translate-y-0 visible"
                           : "opacity-0 -translate-y-2 invisible"
@@ -139,124 +123,10 @@ const Navbar = () => {
                         <Link
                           key={i}
                           to={item.path}
-                          className={`block px-6 py-3.5 font-semibold transition-all duration-300 transform hover:translate-x-2 ${
+                          className={`block px-6 py-3 font-semibold ${
                             isActive(item.path)
-                              ? "bg-gradient-to-r from-primary-600 to-primary-700 text-white"
-                              : "text-gray-700 hover:bg-gradient-to-r hover:from-primary-50 hover:to-primary-100 hover:text-primary-600"
-                          }`}
-                        >
-                          <span className="flex items-center gap-2">
-                            <span
-                              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                                isActive(item.path)
-                                  ? "bg-white"
-                                  : "bg-primary-400"
-                              }`}
-                            ></span>
-                            {item.label}
-                          </span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <Link
-                    key={index}
-                    to={link.path}
-                    className={`relative px-4 py-2.5 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 overflow-hidden group ${
-                      isActive(link.path)
-                        ? "bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-lg"
-                        : "text-gray-700 hover:text-primary-600"
-                    }`}
-                  >
-                    {/* Hover Background Animation */}
-                    <span
-                      className={`absolute inset-0 bg-gradient-to-r from-primary-50 to-primary-100 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left ${
-                        isActive(link.path) ? "hidden" : ""
-                      }`}
-                    ></span>
-                    <span className="relative z-10">{link.label}</span>
-                  </Link>
-                )
-              )}
-
-              {/* Admin Button with Gradient */}
-              <Link
-                to="/admin/login"
-                className="relative ml-2 flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl font-bold transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-2xl overflow-hidden group"
-              >
-                {/* Animated Background */}
-                <span className="absolute inset-0 bg-gradient-to-r from-primary-700 to-primary-800 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-
-                <FaUserShield className="text-lg relative z-10 group-hover:rotate-12 transition-transform" />
-                <span className="relative z-10">Admin</span>
-              </Link>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden hamburger p-2.5 rounded-xl hover:bg-primary-50 transition-all duration-300 transform hover:scale-110"
-              aria-label="Toggle menu"
-            >
-              {isOpen ? (
-                <FaTimes className="text-2xl text-primary-600 animate-spin-once" />
-              ) : (
-                <FaBars className="text-2xl text-gray-900 hover:text-primary-600 transition-colors" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Menu with Slide Animation */}
-        <div
-          className={`lg:hidden mobile-menu transition-all duration-500 ease-in-out ${
-            isOpen
-              ? "max-h-screen opacity-100 translate-y-0"
-              : "max-h-0 opacity-0 -translate-y-4 overflow-hidden"
-          }`}
-        >
-          <div className="container mx-auto px-4 py-6 bg-white/95 backdrop-blur-xl border-t border-gray-200">
-            <div className="flex flex-col gap-2">
-              {navLinks.map((link, index) =>
-                link.dropdown ? (
-                  <div
-                    key={index}
-                    className="animate-slide-in"
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                  >
-                    <button
-                      onClick={() => toggleDropdown(link.label)}
-                      className={`w-full flex items-center justify-between gap-3 px-5 py-3.5 rounded-xl font-semibold transition-all duration-300 ${
-                        activeDropdown === link.label
-                          ? "bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-lg"
-                          : "text-gray-700 hover:bg-gradient-to-r hover:from-primary-50 hover:to-primary-100 hover:text-primary-600"
-                      }`}
-                    >
-                      <span>{link.label}</span>
-                      <FaChevronDown
-                        className={`text-sm transition-transform duration-300 ${
-                          activeDropdown === link.label ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-
-                    {/* Mobile Dropdown */}
-                    <div
-                      className={`ml-4 mt-2 space-y-2 overflow-hidden transition-all duration-300 ${
-                        activeDropdown === link.label
-                          ? "max-h-96 opacity-100"
-                          : "max-h-0 opacity-0"
-                      }`}
-                    >
-                      {link.dropdown.map((item, i) => (
-                        <Link
-                          key={i}
-                          to={item.path}
-                          className={`block px-5 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:translate-x-2 ${
-                            isActive(item.path)
-                              ? "bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-lg"
-                              : "text-gray-700 hover:bg-gradient-to-r hover:from-primary-50 hover:to-primary-100 hover:text-primary-600"
+                              ? "bg-primary-600 text-white"
+                              : "text-gray-700 hover:text-primary-600"
                           }`}
                         >
                           {item.label}
@@ -268,68 +138,130 @@ const Navbar = () => {
                   <Link
                     key={index}
                     to={link.path}
-                    className={`flex items-center gap-3 px-5 py-3.5 rounded-xl font-semibold transition-all duration-300 transform hover:translate-x-2 animate-slide-in ${
+                    className={`px-4 py-2.5 rounded-xl font-semibold ${
                       isActive(link.path)
-                        ? "bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-lg"
-                        : "text-gray-700 hover:bg-gradient-to-r hover:from-primary-50 hover:to-primary-100 hover:text-primary-600"
+                        ? "bg-primary-600 text-white shadow-lg"
+                        : "text-gray-700 hover:text-primary-600"
                     }`}
-                    style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <span
-                      className={`w-2 h-2 rounded-full transition-all ${
-                        isActive(link.path) ? "bg-white" : "bg-primary-400"
-                      }`}
-                    ></span>
                     {link.label}
                   </Link>
                 )
               )}
 
-              {/* Mobile Admin Button */}
-              <Link
-                to="/admin/login"
-                className="flex items-center justify-center gap-2 px-5 py-3.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl font-bold hover:from-primary-700 hover:to-primary-800 transition-all shadow-lg mt-4 animate-slide-in"
-                style={{ animationDelay: `${navLinks.length * 0.1}s` }}
+              {/* ADMIN BUTTON */}
+              <a
+                href="http://localhost:3001"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-2 flex items-center gap-2 px-6 py-2.5 bg-primary-600 text-white rounded-xl font-bold shadow-lg"
               >
-                <FaUserShield className="text-lg" />
+                <FaUserShield />
+                Admin
+              </a>
+            </div>
+
+            {/* MOBILE MENU BUTTON  (FIXED) */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsOpen(!isOpen);
+              }}
+              className="lg:hidden hamburger p-2.5 rounded-xl"
+            >
+              {isOpen ? (
+                <FaTimes className="text-2xl text-primary-600" />
+              ) : (
+                <FaBars className="text-2xl text-gray-900" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* MOBILE MENU (FIXED) */}
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className={`lg:hidden mobile-menu overflow-hidden transition-all duration-500 ${
+            isOpen
+              ? "max-h-screen opacity-100 translate-y-0"
+              : "max-h-0 opacity-0 -translate-y-4"
+          }`}
+        >
+          <div className="px-4 py-6 bg-white/95 backdrop-blur-xl border-t">
+            <div className="flex flex-col gap-2">
+              {navLinks.map((link, index) =>
+                link.dropdown ? (
+                  <div key={index}>
+                    <button
+                      onClick={() => toggleDropdown(link.label)}
+                      className={`w-full flex items-center justify-between px-5 py-3 rounded-xl font-semibold ${
+                        activeDropdown === link.label
+                          ? "bg-primary-600 text-white"
+                          : "text-gray-700 hover:text-primary-600"
+                      }`}
+                    >
+                      {link.label}
+                      <FaChevronDown
+                        className={`transition-transform ${
+                          activeDropdown === link.label ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {/* MOBILE DROPDOWN */}
+                    <div
+                      className={`ml-4 mt-2 space-y-2 overflow-hidden transition-all ${
+                        activeDropdown === link.label
+                          ? "max-h-96 opacity-100"
+                          : "max-h-0 opacity-0"
+                      }`}
+                    >
+                      {link.dropdown.map((item, i) => (
+                        <Link
+                          key={i}
+                          to={item.path}
+                          className={`block px-5 py-3 rounded-xl font-semibold ${
+                            isActive(item.path)
+                              ? "bg-primary-600 text-white"
+                              : "text-gray-700 hover:text-primary-600"
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    key={index}
+                    to={link.path}
+                    className={`px-5 py-3 rounded-xl font-semibold ${
+                      isActive(link.path)
+                        ? "bg-primary-600 text-white"
+                        : "text-gray-700 hover:text-primary-600"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
+
+              {/* MOBILE ADMIN BUTTON */}
+              <a
+                href="http://localhost:3001"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 flex items-center justify-center gap-2 px-5 py-3 bg-primary-600 text-white rounded-xl font-bold"
+              >
+                <FaUserShield />
                 Admin Login
-              </Link>
+              </a>
             </div>
           </div>
         </div>
       </nav>
 
-      {/* Spacer to prevent content from going under fixed navbar */}
       <div className="h-16"></div>
-
-      {/* CSS Animations */}
-      <style jsx>{`
-        @keyframes slide-in {
-          from {
-            opacity: 0;
-            transform: translateX(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-        @keyframes spin-once {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(180deg);
-          }
-        }
-        .animate-slide-in {
-          animation: slide-in 0.5s ease-out forwards;
-          opacity: 0;
-        }
-        .animate-spin-once {
-          animation: spin-once 0.3s ease-out;
-        }
-      `}</style>
     </>
   );
 };

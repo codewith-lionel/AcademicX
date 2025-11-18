@@ -8,9 +8,12 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// CORS Configuration
+// CORS Configuration - Allow both frontend and admin app
 const corsOptions = {
-  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  origin: [
+    process.env.CLIENT_URL || "http://localhost:3000",
+    process.env.ADMIN_URL || "http://localhost:3001",
+  ],
   credentials: true,
   optionsSuccessStatus: 200,
 };

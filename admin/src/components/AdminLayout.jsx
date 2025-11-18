@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaTachometerAlt,
   FaUsers,
@@ -11,28 +11,27 @@ import {
   FaCog,
   FaSignOutAlt,
   FaSearch,
-  FaFlask
-} from 'react-icons/fa';
+  FaFlask,
+} from "react-icons/fa";
 
 const AdminLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('adminToken');
-    navigate('/admin/login');
+    localStorage.removeItem("adminToken");
+    navigate("/login");
   };
 
   const navItems = [
-    { path: '/admin/dashboard', icon: FaTachometerAlt, label: 'Dashboard' },
-    { path: '/admin/faculty', icon: FaUsers, label: 'Faculty' },
-    { path: '/admin/courses', icon: FaBook, label: 'Courses' },
-    { path: '/admin/events', icon: FaCalendar, label: 'Events & Announcements' },
-    { path: '/admin/study-materials', icon: FaFileAlt, label: 'Study Materials' },
-    { path: '/admin/achievements', icon: FaTrophy, label: 'Achievements' },
-    { path: '/admin/gallery', icon: FaImages, label: 'Gallery' },
-    { path: '/admin/research', icon: FaFlask, label: 'Research' },
-    { path: '/admin/settings', icon: FaCog, label: 'Settings' },
+    { path: "/dashboard", icon: FaTachometerAlt, label: "Dashboard" },
+    { path: "/faculty", icon: FaUsers, label: "Faculty" },
+    { path: "/courses", icon: FaBook, label: "Courses" },
+    { path: "/events", icon: FaCalendar, label: "Events & Announcements" },
+    { path: "/materials", icon: FaFileAlt, label: "Study Materials" },
+    { path: "/achievements", icon: FaTrophy, label: "Achievements" },
+    { path: "/gallery", icon: FaImages, label: "Gallery" },
+    { path: "/settings", icon: FaCog, label: "Settings" },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -61,8 +60,8 @@ const AdminLayout = ({ children }) => {
                 to={item.path}
                 className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                   isActive(item.path)
-                    ? 'bg-primary-50 text-primary-600 font-medium'
-                    : 'text-gray-700 hover:bg-gray-50'
+                    ? "bg-primary-50 text-primary-600 font-medium"
+                    : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
                 <item.icon />
@@ -89,7 +88,8 @@ const AdminLayout = ({ children }) => {
         <div className="bg-white shadow-sm border-b px-8 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-gray-900">
-              {navItems.find(item => isActive(item.path))?.label || 'Admin Panel'}
+              {navItems.find((item) => isActive(item.path))?.label ||
+                "Admin Panel"}
             </h1>
             <div className="flex items-center space-x-4">
               <div className="relative">

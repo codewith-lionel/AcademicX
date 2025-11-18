@@ -185,7 +185,7 @@ const AdminDashboard = () => {
     if (window.confirm("Are you sure you want to logout?")) {
       localStorage.removeItem("adminToken");
       toast.success("Logged out successfully!");
-      navigate("/admin/login");
+      navigate("/login");
     }
   };
 
@@ -194,42 +194,42 @@ const AdminDashboard = () => {
       title: "Manage Faculty",
       icon: <FaUsers className="text-4xl" />,
       color: "from-blue-500 to-blue-700",
-      route: "/admin/faculty",
+      route: "/faculty",
       count: stats.faculty,
     },
     {
       title: "Study Materials",
       icon: <FaBook className="text-4xl" />,
       color: "from-green-500 to-green-700",
-      route: "/admin/materials",
+      route: "/materials",
       count: stats.materials,
     },
     {
       title: "Events",
       icon: <FaCalendar className="text-4xl" />,
       color: "from-purple-500 to-purple-700",
-      route: "/admin/events",
+      route: "/events",
       count: stats.events,
     },
     {
       title: "Gallery",
       icon: <FaImage className="text-4xl" />,
       color: "from-pink-500 to-pink-700",
-      route: "/admin/gallery",
+      route: "/gallery",
       count: stats.gallery,
     },
     {
       title: "Achievements",
       icon: <FaTrophy className="text-4xl" />,
       color: "from-yellow-500 to-yellow-700",
-      route: "/admin/achievements",
+      route: "/achievements",
       count: 0, // You'll add this when achievements is ready
     },
     {
       title: "Courses",
       icon: <FaGraduationCap className="text-4xl" />,
       color: "from-indigo-500 to-indigo-700",
-      route: "/admin/courses",
+      route: "/courses",
       count: 0, // You'll add this when courses is ready
     },
   ];

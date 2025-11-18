@@ -29,7 +29,7 @@ const Footer = () => {
     { path: "/study-materials", label: "Study Materials" },
     { path: "/gallery", label: "Gallery" },
     { path: "/achievements", label: "Achievements" },
-    { path: "/admin/login", label: "Admin Panel" },
+    { path: "http://localhost:3001", label: "Admin Panel", external: true },
   ];
 
   const socialLinks = [
@@ -170,13 +170,29 @@ const Footer = () => {
                   key={i}
                   className="transform hover:translate-x-2 transition-transform"
                 >
-                  <Link
-                    to={link.path}
-                    className="text-gray-300 hover:text-primary-300 transition-colors flex items-center gap-3 group"
-                  >
-                    <span className="w-2 h-2 bg-primary-400 rounded-full group-hover:scale-150 transition-transform"></span>
-                    <span className="group-hover:underline">{link.label}</span>
-                  </Link>
+                  {link.external ? (
+                    <a
+                      href={link.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-300 hover:text-primary-300 transition-colors flex items-center gap-3 group"
+                    >
+                      <span className="w-2 h-2 bg-primary-400 rounded-full group-hover:scale-150 transition-transform"></span>
+                      <span className="group-hover:underline">
+                        {link.label}
+                      </span>
+                    </a>
+                  ) : (
+                    <Link
+                      to={link.path}
+                      className="text-gray-300 hover:text-primary-300 transition-colors flex items-center gap-3 group"
+                    >
+                      <span className="w-2 h-2 bg-primary-400 rounded-full group-hover:scale-150 transition-transform"></span>
+                      <span className="group-hover:underline">
+                        {link.label}
+                      </span>
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

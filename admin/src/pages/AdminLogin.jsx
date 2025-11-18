@@ -18,7 +18,7 @@ const AdminLogin = () => {
     if (formData.username && formData.password) {
       localStorage.setItem("adminLoggedIn", "true");
       toast.success("Login successful!");
-      navigate("/admin/dashboard");
+      navigate("/dashboard");
     } else {
       toast.error("Please enter username and password");
     }
