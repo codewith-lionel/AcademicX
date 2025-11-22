@@ -8,11 +8,12 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// CORS Configuration - Allow both frontend and admin app
+// CORS Configuration - Allow frontend, admin, and student app
 const corsOptions = {
   origin: [
     process.env.CLIENT_URL || "http://localhost:3000",
     process.env.ADMIN_URL || "http://localhost:3001",
+    process.env.STUDENT_URL || "http://localhost:3002",
   ],
   credentials: true,
   optionsSuccessStatus: 200,
@@ -50,6 +51,7 @@ app.get("/", (req, res) => {
 });
 
 // API Routes
+app.use("/api/auth", require("./routes/authRoutes")); // Authentication routes
 app.use("/api/faculty", require("./routes/facultyRoutes"));
 app.use("/api/study-materials", require("./routes/studyMaterialRoutes"));
 app.use("/api/events", require("./routes/eventRoutes"));

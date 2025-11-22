@@ -1,26 +1,36 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash, FaUser, FaLock } from "react-icons/fa";
+import { useNavigate, Link } from "react-router-dom";
+import { FaEye, FaEyeSlash, FaUser, FaLock, FaSpinner } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Demo login (replace with real authentication later)
-    if (formData.username && formData.password) {
-      localStorage.setItem("adminLoggedIn", "true");
+    if (!formData.username || !formData.password) {
+      toast.error("Please enter username and password");
+      return;
+    }
+
+    setLoading(true);
+    const result = await login(formData.username, formData.password);
+    setLoading(false);
+
+    if (result.success) {
       toast.success("Login successful!");
       navigate("/dashboard");
     } else {
-      toast.error("Please enter username and password");
+      toast.error(result.error);
     }
   };
 
@@ -99,27 +109,41 @@ const AdminLogin = () => {
                 />
                 <span className="ml-2 text-sm text-gray-600">Remember me</span>
               </label>
-              <a
-                href="#"
+              <button
+                type="button"
                 className="text-sm text-primary-600 hover:text-primary-700"
               >
                 Forgot password?
-              </a>
+              </button>
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors shadow-lg hover:shadow-xl"
+              disabled={loading}
+              className="w-full bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              Sign In
+              {loading ? (
+                <>
+                  <FaSpinner className="animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </button>
           </form>
 
-          {/* Demo Credentials Info */}
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-800 text-center">
-              <strong>Demo:</strong> Use any username and password to login
+          {/* Register Link */}
+          <div className="mt-6 text-center">
+            <p className="text-gray-600">
+              Don't have an account?{" "}
+              <Link
+                to="/register"
+                className="text-blue-600 hover:text-blue-700 font-semibold"
+              >
+                Register Here
+              </Link>
             </p>
           </div>
         </div>

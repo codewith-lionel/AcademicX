@@ -11,16 +11,20 @@ import {
   FaCog,
   FaSignOutAlt,
   FaSearch,
-  FaFlask,
 } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const AdminLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { logout, admin } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("adminToken");
-    navigate("/login");
+    logout();
+    toast.success("Logged out successfully");
+    // Use replace: true to prevent going back to protected pages
+    navigate("/login", { replace: true });
   };
 
   const navItems = [
@@ -43,11 +47,15 @@ const AdminLayout = ({ children }) => {
         <div className="p-6 border-b">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-teal-600 rounded-full flex items-center justify-center text-white font-bold">
-              A
+              {admin?.name?.charAt(0).toUpperCase() || "A"}
             </div>
             <div>
-              <h2 className="font-bold text-gray-900">Admin</h2>
-              <p className="text-sm text-gray-600">CS Department</p>
+              <h2 className="font-bold text-gray-900">
+                {admin?.name || "Admin"}
+              </h2>
+              <p className="text-sm text-gray-600">
+                {admin?.role || "Administrator"}
+              </p>
             </div>
           </div>
         </div>
