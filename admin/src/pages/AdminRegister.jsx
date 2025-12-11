@@ -44,7 +44,8 @@ const AdminRegister = () => {
       !formData.name ||
       !formData.registrationKey
     ) {
-      const errorMsg = "Please fill in all fields including the registration key";
+      const errorMsg =
+        "Please fill in all fields including the registration key";
       setError(errorMsg);
       toast.error(errorMsg);
       return;
