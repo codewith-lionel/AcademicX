@@ -1,88 +1,83 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
 const AuthContext = createContext();
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within AuthProvider");
-  }
-  return context;
-};
+const API_URL = "http://localhost:5000/api/auth";
 
 export const AuthProvider = ({ children }) => {
+  const [token, setToken] = useState(null);
   const [admin, setAdmin] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState(localStorage.getItem("adminToken"));
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const savedToken = localStorage.getItem("adminToken");
-      const savedAdmin = localStorage.getItem("adminUser");
+    const savedToken = localStorage.getItem("adminToken");
+    const savedAdmin = localStorage.getItem("adminUser");
 
-      if (savedToken && savedAdmin) {
+    if (savedToken && savedAdmin) {
+      try {
         setToken(savedToken);
         setAdmin(JSON.parse(savedAdmin));
+        // Set default axios header
         axios.defaults.headers.common["Authorization"] = `Bearer ${savedToken}`;
+      } catch (error) {
+        console.error("Invalid auth data:", error);
+        localStorage.removeItem("adminToken");
+        localStorage.removeItem("adminUser");
       }
-      setLoading(false);
-    };
+    }
 
-    checkAuth();
+    setLoading(false);
   }, []);
 
   const login = async (username, password) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/admin/login",
-        {
-          username,
-          password,
-        }
-      );
+      const response = await axios.post(`${API_URL}/admin/login`, {
+        username,
+        password,
+      });
 
-      const { token, admin } = response.data;
+      const { token: newToken, admin: newAdmin } = response.data;
 
-      localStorage.setItem("adminToken", token);
-      localStorage.setItem("adminUser", JSON.stringify(admin));
+      localStorage.setItem("adminToken", newToken);
+      localStorage.setItem("adminUser", JSON.stringify(newAdmin));
 
-      setToken(token);
-      setAdmin(admin);
+      setToken(newToken);
+      setAdmin(newAdmin);
 
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      // Set default axios header
+      axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
 
       return { success: true };
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.message || "Login failed",
+        error:
+          error.response?.data?.message || "Login failed. Please try again.",
       };
     }
   };
 
   const register = async (username, email, password, name, registrationKey) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/admin/register",
-        {
-          username,
-          email,
-          password,
-          name,
-          registrationKey,
-        }
-      );
+      const response = await axios.post(`${API_URL}/admin/register`, {
+        username,
+        email,
+        password,
+        name,
+        registrationKey,
+      });
 
-      const { token, admin } = response.data;
+      const { token: newToken, admin: newAdmin } = response.data;
 
-      localStorage.setItem("adminToken", token);
-      localStorage.setItem("adminUser", JSON.stringify(admin));
+      localStorage.setItem("adminToken", newToken);
+      localStorage.setItem("adminUser", JSON.stringify(newAdmin));
 
-      setToken(token);
-      setAdmin(admin);
+      setToken(newToken);
+      setAdmin(newAdmin);
 
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      // Set default axios header
+      axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
 
       return { success: true };
     } catch (error) {
@@ -93,20 +88,20 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("adminToken");
     localStorage.removeItem("adminUser");
+    delete axios.defaults.headers.common["Authorization"];
     setToken(null);
     setAdmin(null);
-    delete axios.defaults.headers.common["Authorization"];
   };
 
-  const value = {
-    admin,
-    token,
-    loading,
-    login,
-    register,
-    logout,
-    isAuthenticated: !!token,
-  };
+  const isAuthenticated = !!token;
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{ token, admin, login, register, logout, loading, isAuthenticated }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
+
+export const useAuth = () => useContext(AuthContext);

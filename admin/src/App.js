@@ -5,25 +5,21 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
-// Admin Pages
 import AdminLogin from "./pages/AdminLogin";
 import AdminRegister from "./pages/AdminRegister";
 import AdminDashboard from "./pages/AdminDashboard";
+import Settings from "./pages/manage/Settings";
 import ManageFaculty from "./pages/manage/ManageFaculty";
 import ManageCourses from "./pages/manage/ManageCourses";
 import ManageEvents from "./pages/manage/ManageEvents";
 import ManageStudyMaterials from "./pages/manage/ManageStudyMaterials";
-import ManageGallery from "./pages/manage/ManageGallery";
 import ManageAchievements from "./pages/manage/ManageAchievements";
-import Settings from "./pages/manage/Settings";
+import ManageGallery from "./pages/manage/ManageGallery";
 
-// Protected Route Component
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth();
+  const { token, loading } = useAuth();
 
   if (loading) {
     return (
@@ -33,12 +29,15 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
 };
 
-// Public Route (redirect if authenticated)
 const PublicRoute = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth();
+  const { token, loading } = useAuth();
 
   if (loading) {
     return (
@@ -48,124 +47,120 @@ const PublicRoute = ({ children }) => {
     );
   }
 
-  return !isAuthenticated ? children : <Navigate to="/dashboard" />;
+  // If user is already logged in, redirect to dashboard
+  if (token) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
 };
 
-function AppRoutes() {
-  return (
-    <Routes>
-      {/* Public Routes */}
-      <Route
-        path="/login"
-        element={
-          <PublicRoute>
-            <AdminLogin />
-          </PublicRoute>
-        }
-      />
-      <Route
-        path="/register"
-        element={
-          <PublicRoute>
-            <AdminRegister />
-          </PublicRoute>
-        }
-      />
-
-      {/* Protected Routes */}
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <AdminDashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/faculty"
-        element={
-          <ProtectedRoute>
-            <ManageFaculty />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/courses"
-        element={
-          <ProtectedRoute>
-            <ManageCourses />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/events"
-        element={
-          <ProtectedRoute>
-            <ManageEvents />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/materials"
-        element={
-          <ProtectedRoute>
-            <ManageStudyMaterials />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/gallery"
-        element={
-          <ProtectedRoute>
-            <ManageGallery />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/achievements"
-        element={
-          <ProtectedRoute>
-            <ManageAchievements />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/settings"
-        element={
-          <ProtectedRoute>
-            <Settings />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Default Routes */}
-      <Route path="/" element={<Navigate to="/dashboard" />} />
-      <Route path="*" element={<Navigate to="/dashboard" />} />
-    </Routes>
-  );
-}
-
-function App() {
+const App = () => {
   return (
     <AuthProvider>
       <Router>
-        <div className="App">
-          <AppRoutes />
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
+        <Routes>
+          {/* PUBLIC ROUTES */}
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <AdminLogin />
+              </PublicRoute>
+            }
           />
-        </div>
+
+          <Route
+            path="/register"
+            element={
+              <PublicRoute>
+                <AdminRegister />
+              </PublicRoute>
+            }
+          />
+
+          {/* PROTECTED ROUTES */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/faculty"
+            element={
+              <ProtectedRoute>
+                <ManageFaculty />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/courses"
+            element={
+              <ProtectedRoute>
+                <ManageCourses />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/events"
+            element={
+              <ProtectedRoute>
+                <ManageEvents />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/materials"
+            element={
+              <ProtectedRoute>
+                <ManageStudyMaterials />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/achievements"
+            element={
+              <ProtectedRoute>
+                <ManageAchievements />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/gallery"
+            element={
+              <ProtectedRoute>
+                <ManageGallery />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Root redirects to dashboard */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+          {/* ANY OTHER ROUTE → LOGIN (if not authenticated) or DASHBOARD (if authenticated) */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
       </Router>
     </AuthProvider>
   );
-}
+};
 
 export default App;

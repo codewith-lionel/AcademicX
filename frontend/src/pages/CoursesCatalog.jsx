@@ -39,10 +39,10 @@ const courses = [
 
 const CourseCatalog = () => (
   <div className="min-h-screen bg-gray-50">
-    <section className="py-16 bg-gradient-to-r from-blue-600 to-green-500 text-white">
-      <div className="container mx-auto px-4 text-center">
-        <h1 className="text-5xl font-bold mb-4">Courses Catalog</h1>
-        <p className="text-xl mb-8">
+    <section className="py-16  text-indigo-700">
+      <div className="container mx-auto px-4 text-center ">
+        <h1 className="text-5xl font-bold mb-4 drop-shadow-lg ">Courses Catalog</h1>
+        <p className="text-xl mb-8  drop-shadow-lg ">
           Explore our major undergraduate programs in Computer Science,
           Cybersecurity, AI, and Robotics.
         </p>

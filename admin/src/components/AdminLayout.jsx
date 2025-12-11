@@ -23,8 +23,8 @@ const AdminLayout = ({ children }) => {
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully");
-    // Use replace: true to prevent going back to protected pages
-    navigate("/login", { replace: true });
+    // Force navigation to login page
+    window.location.href = "/login";
   };
 
   const navItems = [

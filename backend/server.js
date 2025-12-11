@@ -58,6 +58,12 @@ app.use("/api/events", require("./routes/eventRoutes"));
 app.use("/api/gallery", require("./routes/galleryRoutes"));
 app.use("/api/achievements", require("./routes/achievementRoutes"));
 
+// Student Portal Routes
+app.use("/api/enrollments", require("./routes/enrollmentRoutes"));
+app.use("/api/assignments", require("./routes/assignmentRoutes"));
+app.use("/api/attendance", require("./routes/attendanceRoutes"));
+app.use("/api/marks", require("./routes/marksRoutes"));
+
 // Only include courses route if it exists
 try {
   app.use("/api/courses", require("./routes/courseRoutes"));

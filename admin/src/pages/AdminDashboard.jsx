@@ -12,6 +12,7 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 import {
   facultyAPI,
   studyMaterialAPI,
@@ -21,6 +22,7 @@ import {
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [stats, setStats] = useState({
     faculty: 0,
     materials: 0,
@@ -183,9 +185,9 @@ const AdminDashboard = () => {
 
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to logout?")) {
-      localStorage.removeItem("adminToken");
+      logout();
       toast.success("Logged out successfully!");
-      navigate("/login");
+      window.location.href = "/login";
     }
   };
 

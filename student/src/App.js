@@ -8,6 +8,13 @@ import "react-toastify/dist/ReactToastify.css";
 import StudentLogin from "./pages/StudentLogin";
 import StudentRegister from "./pages/StudentRegister";
 import Dashboard from "./pages/Dashboard";
+import Courses from "./pages/Courses";
+import Assignments from "./pages/Assignments";
+import Attendance from "./pages/Attendance";
+import Marks from "./pages/Marks";
+
+// Components
+import StudentLayout from "./components/StudentLayout";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -65,7 +72,49 @@ function AppRoutes() {
         path="/dashboard"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <StudentLayout>
+              <Dashboard />
+            </StudentLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/courses"
+        element={
+          <ProtectedRoute>
+            <StudentLayout>
+              <Courses />
+            </StudentLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/assignments"
+        element={
+          <ProtectedRoute>
+            <StudentLayout>
+              <Assignments />
+            </StudentLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/attendance"
+        element={
+          <ProtectedRoute>
+            <StudentLayout>
+              <Attendance />
+            </StudentLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/marks"
+        element={
+          <ProtectedRoute>
+            <StudentLayout>
+              <Marks />
+            </StudentLayout>
           </ProtectedRoute>
         }
       />

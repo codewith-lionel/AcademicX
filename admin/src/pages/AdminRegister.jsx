@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaUser,
   FaEnvelope,
@@ -7,9 +7,11 @@ import {
   FaUserShield,
   FaSpinner,
 } from "react-icons/fa";
+import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 
 const AdminRegister = () => {
+  const navigate = useNavigate();
   const { register } = useAuth();
   const [formData, setFormData] = useState({
     username: "",
@@ -42,17 +44,23 @@ const AdminRegister = () => {
       !formData.name ||
       !formData.registrationKey
     ) {
-      setError("Please fill in all fields including the registration key");
+      const errorMsg = "Please fill in all fields including the registration key";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return;
     }
 
     if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters");
+      const errorMsg = "Password must be at least 6 characters";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      const errorMsg = "Passwords do not match";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return;
     }
 
@@ -65,8 +73,13 @@ const AdminRegister = () => {
         formData.name,
         formData.registrationKey
       );
+      // Registration successful, navigate to dashboard
+      toast.success("Registration successful! Welcome to the admin panel.");
+      navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
+      const errorMsg = err.response?.data?.message || "Registration failed";
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }

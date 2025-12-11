@@ -38,43 +38,65 @@ apiClient.interceptors.response.use(
   }
 );
 
+// ========== COURSE APIs ==========
+export const courseAPI = {
+  getAllCourses: (params) => apiClient.get("/courses", { params }),
+  getCourseById: (id) => apiClient.get(`/courses/${id}`),
+};
+
 // ========== ENROLLMENT APIs ==========
 export const enrollmentAPI = {
-  getAvailableCourses: () => apiClient.get("/courses/available"),
-  getEnrolledCourses: () => apiClient.get("/enrollments/my-courses"),
-  enrollCourse: (courseId) =>
-    apiClient.post("/enrollments/enroll", { courseId }),
-  unenrollCourse: (courseId) => apiClient.delete(`/enrollments/${courseId}`),
-  getCourseDetails: (courseId) => apiClient.get(`/courses/${courseId}`),
+  enrollCourse: (data) => apiClient.post("/enrollments", data),
+  getMyEnrollments: (params) => {
+    const studentId = JSON.parse(localStorage.getItem("studentUser"))?.id;
+    return apiClient.get(`/enrollments/student/${studentId}`, { params });
+  },
+  dropEnrollment: (enrollmentId) =>
+    apiClient.delete(`/enrollments/${enrollmentId}`),
+  getMyGPA: () => {
+    const studentId = JSON.parse(localStorage.getItem("studentUser"))?.id;
+    return apiClient.get(`/enrollments/student/${studentId}/gpa`);
+  },
 };
 
 // ========== ASSIGNMENT APIs ==========
 export const assignmentAPI = {
-  getMyAssignments: () => apiClient.get("/assignments/my-assignments"),
-  getAssignmentDetails: (id) => apiClient.get(`/assignments/${id}`),
-  submitAssignment: (id, formData) =>
-    apiClient.post(`/assignments/${id}/submit`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    }),
-  getSubmissionStatus: (id) => apiClient.get(`/assignments/${id}/submission`),
+  getMyAssignments: (params) =>
+    apiClient.get("/assignments/student", { params }),
+  getAssignmentById: (id) => apiClient.get(`/assignments/${id}`),
+  submitAssignment: (id, data) =>
+    apiClient.post(`/assignments/${id}/submit`, data),
 };
 
 // ========== ATTENDANCE APIs ==========
 export const attendanceAPI = {
-  getMyAttendance: () => apiClient.get("/attendance/my-attendance"),
-  getAttendanceBySubject: (subjectId) =>
-    apiClient.get(`/attendance/subject/${subjectId}`),
-  getAttendanceStats: () => apiClient.get("/attendance/stats"),
+  getMyAttendance: (params) => {
+    const studentId = JSON.parse(localStorage.getItem("studentUser"))?.id;
+    return apiClient.get(`/attendance/student/${studentId}`, { params });
+  },
+  getMyCourseAttendance: (courseId, params) => {
+    const studentId = JSON.parse(localStorage.getItem("studentUser"))?.id;
+    return apiClient.get(
+      `/attendance/student/${studentId}/course/${courseId}`,
+      { params }
+    );
+  },
 };
 
 // ========== MARKS APIs ==========
 export const marksAPI = {
-  getMyMarks: () => apiClient.get("/marks/my-marks"),
-  getMarksBySubject: (subjectId) =>
-    apiClient.get(`/marks/subject/${subjectId}`),
-  getSemesterResults: (semester) =>
-    apiClient.get(`/marks/semester/${semester}`),
-  getCGPA: () => apiClient.get("/marks/cgpa"),
+  getMyMarks: (params) => {
+    const studentId = JSON.parse(localStorage.getItem("studentUser"))?.id;
+    return apiClient.get(`/marks/student/${studentId}`, { params });
+  },
+  getMyGPA: () => {
+    const studentId = JSON.parse(localStorage.getItem("studentUser"))?.id;
+    return apiClient.get(`/marks/student/${studentId}/gpa`);
+  },
+  getGradeCard: (semester) => {
+    const studentId = JSON.parse(localStorage.getItem("studentUser"))?.id;
+    return apiClient.get(`/marks/student/${studentId}/gradecard/${semester}`);
+  },
 };
 
 // ========== EXAM APIs ==========
