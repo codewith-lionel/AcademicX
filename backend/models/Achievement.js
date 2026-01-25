@@ -39,8 +39,8 @@ const achievementSchema = new mongoose.Schema(
     },
     achieverType: {
       type: String,
-      enum: ["Student", "Faculty", "Team", "Department"],
-      default: "Student",
+      enum: ["Faculty", "Team", "Department"],
+      default: "Faculty",
     },
     date: {
       type: Date,

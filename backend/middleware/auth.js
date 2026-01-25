@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const Student = require("../models/Student");
 const Admin = require("../models/Admin");
 const TokenBlacklist = require("../models/TokenBlacklist");
 
@@ -59,14 +58,8 @@ exports.protect = async (req, res, next) => {
     // Verify access token
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    // Identify user type
-    let user = null;
-
-    if (decoded.role === "admin" || decoded.role === "superadmin") {
-      user = await Admin.findById(decoded.id).select("-password");
-    } else {
-      user = await Student.findById(decoded.id).select("-password");
-    }
+    // Get admin user
+    const user = await Admin.findById(decoded.id).select("-password");
 
     if (!user) {
       return res.status(401).json({
@@ -129,13 +122,7 @@ exports.refreshToken = async (req, res) => {
   try {
     const decoded = jwt.verify(refreshToken, REFRESH_SECRET);
 
-    let user;
-
-    if (decoded.role === "admin" || decoded.role === "superadmin") {
-      user = await Admin.findById(decoded.id);
-    } else {
-      user = await Student.findById(decoded.id);
-    }
+    const user = await Admin.findById(decoded.id);
 
     if (!user) {
       return res

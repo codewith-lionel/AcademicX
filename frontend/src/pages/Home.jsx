@@ -15,7 +15,6 @@ import {
   facultyAPI,
   studyMaterialAPI,
   eventAPI,
-  galleryAPI,
   achievementAPI,
 } from "../services/api";
 
@@ -211,7 +210,7 @@ const Home = () => {
       </section>
 
       {/* ================= FOOTER CALL ================= */}
-    
+
       {/* Custom keyframe for shimmer */}
       <style>{`
         @keyframes shimmer {

@@ -3,18 +3,6 @@ const router = express.Router();
 const attendanceController = require("../controllers/attendanceController");
 const { protect, authorize } = require("../middleware/auth");
 
-// Student routes
-router.get(
-  "/student/:studentId",
-  protect,
-  attendanceController.getStudentAttendance
-);
-router.get(
-  "/student/:studentId/course/:courseId",
-  protect,
-  attendanceController.getStudentCourseAttendance
-);
-
 // Admin routes
 router.post(
   "/",

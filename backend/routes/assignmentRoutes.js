@@ -3,10 +3,6 @@ const router = express.Router();
 const assignmentController = require("../controllers/assignmentController");
 const { protect, authorize } = require("../middleware/auth");
 
-// Student routes
-router.get("/student", protect, assignmentController.getStudentAssignments);
-router.post("/:id/submit", protect, assignmentController.submitAssignment);
-
 // Common routes
 router.get("/", protect, assignmentController.getAllAssignments);
 router.get("/:id", protect, assignmentController.getAssignmentById);

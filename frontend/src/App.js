@@ -15,7 +15,6 @@ import StudyMaterials from "./pages/StudyMaterials";
 import EventsAnnouncements from "./pages/EventsAnnouncements";
 import Gallery from "./pages/Gallery";
 import Achievements from "./pages/Achievements";
-import About from "./pages/About";
 import Contact from "./pages/Contact";
 
 function App() {
@@ -38,7 +37,6 @@ function App() {
                       path="/study-materials"
                       element={<StudyMaterials />}
                     />
-                    <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/events" element={<EventsAnnouncements />} />
                     <Route path="/gallery" element={<Gallery />} />
