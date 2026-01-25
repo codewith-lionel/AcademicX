@@ -147,7 +147,7 @@ const server = app.listen(PORT, () => {
       process.env.MONGO_URI || process.env.MONGODB_URI
         ? "Connected"
         : "Not configured"
-    }`
+    }`,
   );
   console.log("=".repeat(50));
   console.log("\n📍 Available Routes:");

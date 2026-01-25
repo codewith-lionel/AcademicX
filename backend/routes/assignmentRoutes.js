@@ -12,25 +12,25 @@ router.post(
   "/",
   protect,
   authorize("admin", "superadmin"),
-  assignmentController.createAssignment
+  assignmentController.createAssignment,
 );
 router.put(
   "/:id",
   protect,
   authorize("admin", "superadmin"),
-  assignmentController.updateAssignment
+  assignmentController.updateAssignment,
 );
 router.delete(
   "/:id",
   protect,
   authorize("admin", "superadmin"),
-  assignmentController.deleteAssignment
+  assignmentController.deleteAssignment,
 );
 router.put(
   "/:id/submissions/:submissionId/grade",
   protect,
   authorize("admin", "superadmin"),
-  assignmentController.gradeSubmission
+  assignmentController.gradeSubmission,
 );
 
 module.exports = router;

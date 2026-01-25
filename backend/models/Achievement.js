@@ -99,7 +99,7 @@ const achievementSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Indexes for faster queries

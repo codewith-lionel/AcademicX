@@ -8,31 +8,31 @@ router.post(
   "/",
   protect,
   authorize("admin", "superadmin"),
-  attendanceController.markAttendance
+  attendanceController.markAttendance,
 );
 router.get(
   "/course/:courseId",
   protect,
   authorize("admin", "superadmin"),
-  attendanceController.getCourseAttendance
+  attendanceController.getCourseAttendance,
 );
 router.put(
   "/:id",
   protect,
   authorize("admin", "superadmin"),
-  attendanceController.updateAttendance
+  attendanceController.updateAttendance,
 );
 router.delete(
   "/:id",
   protect,
   authorize("admin", "superadmin"),
-  attendanceController.deleteAttendance
+  attendanceController.deleteAttendance,
 );
 router.get(
   "/stats/:courseId",
   protect,
   authorize("admin", "superadmin"),
-  attendanceController.getAttendanceStats
+  attendanceController.getAttendanceStats,
 );
 
 module.exports = router;
