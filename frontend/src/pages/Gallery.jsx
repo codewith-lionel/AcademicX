@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   FaImage,
   FaStar,
@@ -39,14 +39,6 @@ const Gallery = () => {
     "Other",
   ];
 
-  useEffect(() => {
-    fetchImages();
-  }, []);
-
-  useEffect(() => {
-    applyFilters();
-  }, [images, searchTerm, selectedCategory]);
-
   const fetchImages = async () => {
     try {
       setLoading(true);
@@ -63,7 +55,7 @@ const Gallery = () => {
     }
   };
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     let filtered = [...images];
 
     // Search filter
@@ -74,8 +66,8 @@ const Gallery = () => {
           img.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           img.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
           img.tags?.some((tag) =>
-            tag.toLowerCase().includes(searchTerm.toLowerCase())
-          )
+            tag.toLowerCase().includes(searchTerm.toLowerCase()),
+          ),
       );
     }
 
@@ -88,7 +80,15 @@ const Gallery = () => {
     filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     setFilteredImages(filtered);
-  };
+  }, [images, searchTerm, selectedCategory]);
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [applyFilters]);
 
   const clearFilters = () => {
     setSearchTerm("");

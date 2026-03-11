@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   FaBook,
   FaFilePdf,
@@ -43,14 +43,6 @@ const StudyMaterials = () => {
     "Other",
   ];
 
-  useEffect(() => {
-    fetchMaterials();
-  }, []);
-
-  useEffect(() => {
-    applyFilters();
-  }, [materials, searchTerm, selectedYear, selectedSemester, selectedCategory]);
-
   const fetchMaterials = async () => {
     try {
       setLoading(true);
@@ -75,7 +67,7 @@ const StudyMaterials = () => {
     }
   };
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     let filtered = [...materials];
 
     // Search filter
@@ -84,7 +76,7 @@ const StudyMaterials = () => {
         (m) =>
           m.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           m.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          m.description?.toLowerCase().includes(searchTerm.toLowerCase())
+          m.description?.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
@@ -104,7 +96,15 @@ const StudyMaterials = () => {
     }
 
     setFilteredMaterials(filtered);
-  };
+  }, [materials, searchTerm, selectedYear, selectedSemester, selectedCategory]);
+
+  useEffect(() => {
+    fetchMaterials();
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [applyFilters]);
 
   const clearFilters = () => {
     setSearchTerm("");
@@ -373,7 +373,7 @@ const StudyMaterials = () => {
                                 <div className="text-xs text-gray-500 mb-4">
                                   Uploaded by {material.uploadedBy} •{" "}
                                   {new Date(
-                                    material.createdAt
+                                    material.createdAt,
                                   ).toLocaleDateString()}
                                 </div>
 

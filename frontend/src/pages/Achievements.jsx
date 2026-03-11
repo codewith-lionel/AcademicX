@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   FaTrophy,
   FaStar,
@@ -46,14 +46,6 @@ const Achievements = () => {
 
   const achieverTypes = ["All", "Student", "Faculty", "Team", "Department"];
 
-  useEffect(() => {
-    fetchAchievements();
-  }, []);
-
-  useEffect(() => {
-    applyFilters();
-  }, [achievements, searchTerm, selectedCategory, selectedType, selectedYear]);
-
   const fetchAchievements = async () => {
     try {
       setLoading(true);
@@ -70,7 +62,7 @@ const Achievements = () => {
     }
   };
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     let filtered = [...achievements];
 
     // Search filter
@@ -81,8 +73,8 @@ const Achievements = () => {
           a.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           a.achievedBy.toLowerCase().includes(searchTerm.toLowerCase()) ||
           a.tags?.some((tag) =>
-            tag.toLowerCase().includes(searchTerm.toLowerCase())
-          )
+            tag.toLowerCase().includes(searchTerm.toLowerCase()),
+          ),
       );
     }
 
@@ -105,7 +97,15 @@ const Achievements = () => {
     filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     setFilteredAchievements(filtered);
-  };
+  }, [achievements, searchTerm, selectedCategory, selectedType, selectedYear]);
+
+  useEffect(() => {
+    fetchAchievements();
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [applyFilters]);
 
   const clearFilters = () => {
     setSearchTerm("");
@@ -219,7 +219,7 @@ const Achievements = () => {
                 >
                   <div
                     className={`h-48 bg-gradient-to-br ${getCategoryColor(
-                      achievement.category
+                      achievement.category,
                     )} flex items-center justify-center relative p-4`}
                   >
                     {achievement.imageUrl ? (
@@ -402,7 +402,7 @@ const Achievements = () => {
                 {/* Image - Full Display */}
                 <div
                   className={`h-56 bg-gradient-to-br ${getCategoryColor(
-                    achievement.category
+                    achievement.category,
                   )} flex items-center justify-center relative p-4`}
                 >
                   {achievement.imageUrl ? (
@@ -501,7 +501,7 @@ const Achievements = () => {
               {/* Left Side - FULL IMAGE */}
               <div
                 className={`bg-gradient-to-br ${getCategoryColor(
-                  selectedAchievement.category
+                  selectedAchievement.category,
                 )} flex items-center justify-center p-8 relative`}
               >
                 {selectedAchievement.imageUrl ? (
@@ -542,7 +542,7 @@ const Achievements = () => {
                 <div className="flex items-center gap-2 mb-4 flex-wrap">
                   <span
                     className={`px-4 py-2 bg-gradient-to-r ${getCategoryColor(
-                      selectedAchievement.category
+                      selectedAchievement.category,
                     )} text-white rounded-full text-sm font-bold`}
                   >
                     {getCategoryIcon(selectedAchievement.category)}{" "}

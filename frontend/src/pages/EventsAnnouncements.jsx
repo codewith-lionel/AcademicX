@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   FaCalendar,
   FaMapMarkerAlt,
@@ -49,14 +49,6 @@ const EventsAnnouncements = () => {
     "Cancelled",
   ];
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  useEffect(() => {
-    applyFilters();
-  }, [events, searchTerm, selectedType, selectedStatus, activeTab]);
-
   const fetchEvents = async () => {
     try {
       setLoading(true);
@@ -73,18 +65,18 @@ const EventsAnnouncements = () => {
     }
   };
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     let filtered = [...events];
 
     // Tab filter (upcoming, past, all)
     const now = new Date();
     if (activeTab === "upcoming") {
       filtered = filtered.filter(
-        (e) => new Date(e.eventDate) >= now && e.status !== "Completed"
+        (e) => new Date(e.eventDate) >= now && e.status !== "Completed",
       );
     } else if (activeTab === "past") {
       filtered = filtered.filter(
-        (e) => new Date(e.eventDate) < now || e.status === "Completed"
+        (e) => new Date(e.eventDate) < now || e.status === "Completed",
       );
     }
 
@@ -94,7 +86,7 @@ const EventsAnnouncements = () => {
         (e) =>
           e.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           e.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          e.venue?.toLowerCase().includes(searchTerm.toLowerCase())
+          e.venue?.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
@@ -116,7 +108,15 @@ const EventsAnnouncements = () => {
     });
 
     setFilteredEvents(filtered);
-  };
+  }, [events, searchTerm, selectedType, selectedStatus, activeTab]);
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [applyFilters]);
 
   const clearFilters = () => {
     setSearchTerm("");
@@ -295,8 +295,8 @@ const EventsAnnouncements = () => {
               {hasActiveFilters
                 ? "Try adjusting your filters or search term"
                 : activeTab === "upcoming"
-                ? "No upcoming events at the moment. Check back soon!"
-                : "No events available"}
+                  ? "No upcoming events at the moment. Check back soon!"
+                  : "No events available"}
             </p>
             {hasActiveFilters && (
               <button
@@ -343,7 +343,7 @@ const EventsAnnouncements = () => {
                     </span>
                     <span
                       className={`px-3 py-1 text-xs font-semibold rounded-full border ${getStatusColor(
-                        event.status
+                        event.status,
                       )}`}
                     >
                       {event.status}
@@ -503,7 +503,7 @@ const EventsAnnouncements = () => {
                     events.filter(
                       (e) =>
                         new Date(e.eventDate) >= new Date() &&
-                        e.status !== "Completed"
+                        e.status !== "Completed",
                     ).length
                   }
                 </div>
