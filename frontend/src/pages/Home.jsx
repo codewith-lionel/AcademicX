@@ -105,9 +105,10 @@ const Home = () => {
           });
         });
 
+        // Subtle zoom effect on hero background
         gsap.to(".hero-bg", {
-          backgroundPosition: "200% center",
-          duration: 8,
+          scale: 1.1,
+          duration: 20,
           repeat: -1,
           yoyo: true,
           ease: "sine.inOut",
@@ -124,8 +125,13 @@ const Home = () => {
         ref={heroRef}
         className="relative hero-section text-white py-28 overflow-hidden"
       >
-        <div className="absolute inset-0 hero-bg bg-gradient-to-r from-indigo-700 via-purple-700 to-fuchsia-600 bg-[length:400%_400%] transition-all"></div>
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]"></div>
+        <div
+          className="absolute inset-0 hero-bg bg-cover bg-center bg-no-repeat transition-all"
+          style={{
+            backgroundImage: `url(${process.env.PUBLIC_URL}/college-bg.jpg)`,
+          }}
+        ></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/80 via-purple-900/75 to-fuchsia-900/80"></div>
 
         <div className="container mx-auto px-4 relative z-10 text-center">
           <motion.div
