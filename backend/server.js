@@ -8,31 +8,25 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// CORS Configuration - Allow frontend and admin
 const allowedOrigins = [
-  process.env.CLIENT_URL || "http://localhost:3000",
-  process.env.ADMIN_URL || "http://localhost:3001",
-  "http://localhost:3000", // Allow local development
-  "http://localhost:3001", // Allow local admin development
-  "http://localhost:3002", // Allow local student development
+  "https://euphonious-seahorse-57b571.netlify.app",
+  "https://magical-moonbeam-7e5f87.netlify.app",
+  "http://localhost:3000",
+  "http://localhost:3001",
 ];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or Postman)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error(`Not allowed by CORS: ${origin}`));
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  }),
+);
 
 // Body parser middleware with appropriate limits
 app.use(express.json({ limit: "10mb" }));
@@ -90,6 +84,14 @@ app.use((req, res, next) => {
 // Global error handling middleware
 app.use((err, req, res, next) => {
   console.error("Error occurred:", err);
+
+  if (err.message && err.message.startsWith("Not allowed by CORS")) {
+    return res.status(403).json({
+      success: false,
+      message: err.message,
+      timestamp: new Date().toISOString(),
+    });
+  }
 
   // Mongoose validation error
   if (err.name === "ValidationError") {

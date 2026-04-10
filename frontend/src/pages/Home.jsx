@@ -6,6 +6,9 @@ import {
   FaBook,
   FaCalendar,
   FaTrophy,
+  FaBullseye,
+  FaRocket,
+  FaLaptopCode,
 } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { gsap } from "gsap";
@@ -123,7 +126,7 @@ const Home = () => {
       {/* ================= HERO SECTION ================= */}
       <section
         ref={heroRef}
-        className="relative hero-section text-white py-28 overflow-hidden"
+        className="relative hero-section text-white min-h-[calc(100vh-4rem)] flex items-center overflow-hidden"
       >
         <div
           className="absolute inset-0 hero-bg bg-cover bg-center bg-no-repeat transition-all"
@@ -148,13 +151,13 @@ const Home = () => {
               creativity, excellence, and AI-powered learning.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <Link
-                to="/about"
+              <a
+                href="#about-section"
                 className="relative group px-8 py-3 bg-white text-indigo-700 font-semibold rounded-lg overflow-hidden"
               >
                 <span className="absolute inset-0 bg-indigo-200 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"></span>
                 <span className="relative z-10">Learn More</span>
-              </Link>
+              </a>
               <Link
                 to="/contact"
                 className="relative group px-8 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-lg overflow-hidden"
@@ -211,6 +214,78 @@ const Home = () => {
                     <StatCard {...s} />
                   </div>
                 ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= ABOUT SECTION ================= */}
+      <section
+        id="about-section"
+        className="scroll-mt-24 py-20 bg-gradient-to-br from-slate-50 via-white to-blue-50"
+      >
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <p className="inline-block px-4 py-1.5 rounded-full text-xs font-bold tracking-[0.2em] uppercase bg-indigo-100 text-indigo-700 mb-4">
+              About Us
+            </p>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+              Building Future-Ready Technologists
+            </h2>
+            <p className="text-gray-600 text-base md:text-lg leading-relaxed">
+              The School of Computing nurtures innovation, research, and
+              practical problem-solving through a learning environment that
+              blends strong fundamentals with modern technologies.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-10">
+            <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-4 text-xl">
+                <FaBullseye />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                Our Mission
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Deliver high-quality computing education that empowers students
+                to solve real-world challenges ethically and effectively.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4 text-xl">
+                <FaRocket />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                Our Vision
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Become a leading center for technology education and innovation,
+                producing graduates who create impact across industries.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-violet-100 text-violet-600 flex items-center justify-center mb-4 text-xl">
+                <FaLaptopCode />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                What We Offer
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Industry-aligned courses, expert faculty guidance, practical
+                labs, and project-based learning designed for career readiness.
+              </p>
+            </div>
+          </div>
+
+          <div className="max-w-4xl mx-auto bg-white/90 border border-gray-100 rounded-2xl shadow-md p-6 md:p-8">
+            <p className="text-gray-700 leading-relaxed text-center">
+              From software development and data science to AI-driven systems,
+              our students gain the confidence to learn continuously,
+              collaborate effectively, and build meaningful technology
+              solutions.
+            </p>
           </div>
         </div>
       </section>
