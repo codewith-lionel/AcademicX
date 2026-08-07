@@ -1,7 +1,10 @@
 ﻿const express = require("express");
 const cors = require("cors");
+const dns = require("dns");
 const connectDB = require("./config/database"); // Changed from './config/db'
 require("dotenv").config();
+
+dns.setServers(["8.8.8.8", "8.8.4.4"]); // Google Public DNS
 
 const app = express();
 
